@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Trivia Game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            background: url("assets/images/placeholder2.jpeg") 0 0 repeat;
+        }
+        .card-body {
+            background: rgba(54, 75, 60, 0.562);
+        }
+        #mybtn {
+            width: 100%;
+            margin-bottom: 5px;
+            white-space: inherit;
+        }
+        .card-footer {
+            margin-bottom: 1em;
+        }
+        @media(min-width: 700px) {
+            .btn {
+                width: inherit;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card text-white text-center">
+        <div class="card-img-overlay">
+            <div class="card-header bg-danger">
+            Time Remaining:
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Question 1:</h5>
+                <p class="card-text">Why are the holes in cats' fur always in the right place for their eyes?</p>
+                <button id="mybtn" class="btn btn-dark">They don't know</button>
+                <button id="mybtn" class="btn btn-dark">It has to do with the tilt of the Earth's axis</button>
+                <button id="mybtn" class="btn btn-dark">Google it</button>
+                <button id="mybtn" class="btn btn-dark">I DON'T KNOW!!!</button>
+            </div>
+            <div class="card-footer bg-primary">
+            Score: 
+            </div>
+        </div>
+    </div>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+    <script>
+    $('button').on('click', function() {
+        alert("yo");
+    });
+    </script>
+</body>
+</html>
