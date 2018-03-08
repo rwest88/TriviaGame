@@ -37,24 +37,111 @@
             <div class="card-body">
                 <h5 class="card-title">Question 1:</h5>
                 <p class="card-text">Why are the holes in cats' fur always in the right place for their eyes?</p>
-                <button id="mybtn" class="btn btn-dark">They don't know</button>
-                <button id="mybtn" class="btn btn-dark">It has to do with the tilt of the Earth's axis</button>
-                <button id="mybtn" class="btn btn-dark">Google it</button>
-                <button id="mybtn" class="btn btn-dark">I DON'T KNOW!!!</button>
+                <button id="mybtn" data-btn="0" class="btn btn1 btn-dark">They don't know</button>
+                <button id="mybtn" data-btn="1" class="btn btn2 btn-dark">It has to do with the tilt of the Earth's axis</button>
+                <button id="mybtn" data-btn="2" class="btn btn3 btn-dark">Google it</button>
+                <button id="mybtn" data-btn="3" class="btn btn4 btn-dark">I DON'T KNOW!!!</button>
             </div>
             <div class="card-footer bg-primary">
             Score: 
             </div>
         </div>
     </div>
-    <script
+
+<script
     src="https://code.jquery.com/jquery-3.3.1.js"
     integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-    crossorigin="anonymous"></script>
-    <script>
-    $('button').on('click', function() {
-        alert("yo");
-    });
-    </script>
+    crossorigin="anonymous">
+</script>
+
+<script>
+
+var trivia = [
+    {   // [0] Q1
+        "q": "one plus two?",
+        "a": [
+            "three",
+            "eight",
+            "four",
+            "nine",
+        ],
+        "c": "three"
+    },
+    {   // [1] Q2
+        "q": "six plus two?",
+        "a": [
+            "three",
+            "eight",
+            "four",
+            "nine",
+        ],
+        "c": "eight"
+    },
+    {   // [2] Q3
+        "q": "two plus two?",
+        "a": [
+            "three",
+            "eight",
+            "four",
+            "nine",
+        ],
+        "c": "four"
+    },
+    {   // [3] Q4
+        "q": "seven plus two?",
+        "a": [
+            "three",
+            "eight",
+            "four",
+            "nine",
+        ],
+        "c": "nine"
+    },
+    {   // [4] Q5
+        "q": "ten minus seven?",
+        "a": [
+            "three",
+            "eight",
+            "four",
+            "nine",
+        ],
+        "c": "three"
+    }
+]
+
+var count = -1;
+
+function newQuestion() {
+    count++;
+    if (count >= trivia.length) {
+        end();
+        return false;
+    }
+    $('.card-title').text("Question " + (count + 1) + ":");
+    $('.card-text').text(trivia[count].q);
+
+    $('.btn1').text(trivia[count].a[$('.btn1').data('btn')]);
+    $('.btn2').text(trivia[count].a[$('.btn2').data('btn')]);
+    $('.btn3').text(trivia[count].a[$('.btn3').data('btn')]);
+    $('.btn4').text(trivia[count].a[$('.btn4').data('btn')]);
+}
+
+function end() {
+    $('.card-title').text("Game Over");
+    $('.card-text').text("You answered x / x correctly");
+}
+    
+$('button').on('click', function() {
+    if (trivia[count].a[$(this).data('btn')] == trivia[count].c) {
+        alert('good');
+    } else {
+        alert('bad');
+    }
+    newQuestion();
+});
+
+newQuestion();
+
+</script>
 </body>
 </html>
