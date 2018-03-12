@@ -10,20 +10,42 @@
         body {
             background: url("assets/images/placeholder2.jpeg") 0 0 repeat;
         }
+        /* how do we get rid of the little margin above the background image? */
         .card-body {
             background: rgba(54, 75, 60, 0.562);
+        }
+        #imbedded-code {
+            text-align: left;
+            margin-left: 10%;
+            font-size: .7rem;
+            /* font-family: 'Courier New', Courier, monospace; */
+        }
+        #imbedded-code-button {
+            font-size: .7rem;
         }
         #mybtn {
             width: 100%;
             margin-bottom: 5px;
             white-space: inherit;
         }
+        /* how do we get rid of the 'visited' pseudoclass, so the buttons look the same on each question? */
+        .red {
+            background-color: red;
+        }
         .card-footer {
             margin-bottom: 1em;
         }
         @media(min-width: 700px) {
-            .btn {
-                width: inherit;
+            #mybtn {
+                width: 45%;
+                /* white-space:pre-wrap; */
+            }
+            #imbedded-code {
+                margin-left: 35%;
+                font-size: .9rem;
+            }
+            #imbedded-code-button {
+                font-size: .9rem;
             }
         }
     </style>
@@ -55,47 +77,46 @@
 </script>
 
 <script>
-
 var trivia = [
     {   // [0] Q1
-        "q": "one plus two?",
+        "q": "What will be printed to the console?<br><br><div id='imbedded-code'> const arr = [10, 12, 15, 21]; <br>for (var i = 0; i < arr.length; i++) {<br>&nbsp;&nbsp;setTimeout(function() {<br>&nbsp;&nbsp;&nbsp;&nbsp;console.log('Index: ' + i + ', element: ' + arr[i]);<br>&nbsp;&nbsp;}, 3000);<br>}</div>",
         "a": [
-            "three",
-            "eight",
-            "four",
-            "nine",
+            "<div id='imbedded-code-button'>Index: 0, element: 10<br>Index: 1, element: 12<br>Index: 2, element: 15<br>Index: 3, element: 21<br>Index: 4, element: undefined</div>",
+            "<div id='imbedded-code-button'>Index: 3, element: 21<br>Index: 3, element: 21<br>Index: 3, element: 21<br>Index: 3, element: 21<br><br></div>",
+            "<div id='imbedded-code-button'>Index: 0, element: 10<br>Index: 1, element: 12<br>Index: 2, element: 15<br>Index: 3, element: 21<br><br></div>",
+            "<div id='imbedded-code-button'>Index: 4, element: undefined<br>Index: 4, element: undefined<br>Index: 4, element: undefined<br>Index: 4, element: undefined<br><br></div>",
         ],
-        "c": "three"
+        "c": "3"
     },
     {   // [1] Q2
-        "q": "six plus two?",
+        "q": "Why are the holes in cats' fur always in the right place for their eyes?",
         "a": [
-            "three",
+            "twelve",
             "eight",
-            "four",
-            "nine",
+            "six",
+            "answer is non-numeric",
         ],
-        "c": "eight"
+        "c": "3"
     },
     {   // [2] Q3
         "q": "two plus two?",
         "a": [
-            "three",
-            "eight",
+            "one hundred",
+            "seven",
             "four",
-            "nine",
+            "three",
         ],
-        "c": "four"
+        "c": "2"
     },
     {   // [3] Q4
         "q": "seven plus two?",
         "a": [
-            "three",
-            "eight",
-            "four",
+            "sixty-three",
+            "seventy-two",
+            "two",
             "nine",
         ],
-        "c": "nine"
+        "c": "3"
     },
     {   // [4] Q5
         "q": "ten minus seven?",
@@ -103,42 +124,47 @@ var trivia = [
             "three",
             "eight",
             "four",
-            "nine",
+            "six",
         ],
-        "c": "three"
+        "c": "0"
     }
 ]
 
-var count = -1;
+var qCount = -1;
 
 function newQuestion() {
-    count++;
-    if (count >= trivia.length) {
+    qCount++;
+    if (qCount >= trivia.length) {
         end();
         return false;
     }
-    $('.card-title').text("Question " + (count + 1) + ":");
-    $('.card-text').text(trivia[count].q);
+    $('.card-title').text("Question " + (qCount + 1) + ":");
+    $('.card-text').html(trivia[qCount].q);
 
-    $('.btn1').text(trivia[count].a[$('.btn1').data('btn')]);
-    $('.btn2').text(trivia[count].a[$('.btn2').data('btn')]);
-    $('.btn3').text(trivia[count].a[$('.btn3').data('btn')]);
-    $('.btn4').text(trivia[count].a[$('.btn4').data('btn')]);
+    $('button').removeClass('btn-success btn-danger').addClass('btn-dark');
+    $('.btn1').html(trivia[qCount].a[$('.btn1').data('btn')]);
+    $('.btn2').html(trivia[qCount].a[$('.btn2').data('btn')]);
+    $('.btn3').html(trivia[qCount].a[$('.btn3').data('btn')]);
+    $('.btn4').html(trivia[qCount].a[$('.btn4').data('btn')]);
+}
+
+function checkAnswer() {
+    if ($(this).data('btn') == trivia[qCount].c) {
+        $('.card-title').html("Correct!")
+    } else {
+        $('.card-title').html("Incorrect.");
+        $(this).removeClass('btn-dark').addClass('btn-danger')
+    }
+    $(`[data-btn~=${trivia[qCount].c}]`).removeClass('btn-dark').addClass('btn-success');
+    setTimeout(newQuestion, 5000);
 }
 
 function end() {
     $('.card-title').text("Game Over");
     $('.card-text').text("You answered x / x correctly");
 }
-    
-$('button').on('click', function() {
-    if (trivia[count].a[$(this).data('btn')] == trivia[count].c) {
-        alert('good');
-    } else {
-        alert('bad');
-    }
-    newQuestion();
-});
+
+$('button').on('click', checkAnswer);
 
 newQuestion();
 
