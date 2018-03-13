@@ -86,7 +86,8 @@ var trivia = [
             "<div id='imbedded-code-button'>Index: 0, element: 10<br>Index: 1, element: 12<br>Index: 2, element: 15<br>Index: 3, element: 21<br><br></div>",
             "<div id='imbedded-code-button'>Index: 4, element: undefined<br>Index: 4, element: undefined<br>Index: 4, element: undefined<br>Index: 4, element: undefined<br><br></div>",
         ],
-        "c": "3"
+        "c": "3",
+        "t": 45
     },
     {   // [1] Q2
         "q": "Why are the holes in cats' fur always in the right place for their eyes?",
@@ -96,7 +97,8 @@ var trivia = [
             "six",
             "answer is non-numeric",
         ],
-        "c": "3"
+        "c": "3",
+        "t": 10
     },
     {   // [2] Q3
         "q": "two plus two?",
@@ -106,7 +108,8 @@ var trivia = [
             "four",
             "three",
         ],
-        "c": "2"
+        "c": "2",
+        "t": 5
     },
     {   // [3] Q4
         "q": "seven plus two?",
@@ -116,7 +119,8 @@ var trivia = [
             "two",
             "nine",
         ],
-        "c": "3"
+        "c": "3",
+        "t": 5
     },
     {   // [4] Q5
         "q": "ten minus seven?",
@@ -126,11 +130,18 @@ var trivia = [
             "four",
             "six",
         ],
-        "c": "0"
+        "c": "0",
+        "t": 5
     }
 ]
 
 var qCount = -1;
+var correct = 0;
+var intervalThisQ;
+var intervalNextQ;
+var timeRemaining = 0;
+var timeToNext = 0;
+var enabled = false;
 
 function newQuestion() {
     qCount++;
@@ -146,22 +157,52 @@ function newQuestion() {
     $('.btn2').html(trivia[qCount].a[$('.btn2').data('btn')]);
     $('.btn3').html(trivia[qCount].a[$('.btn3').data('btn')]);
     $('.btn4').html(trivia[qCount].a[$('.btn4').data('btn')]);
+    enabled = true;
+    timeRemaining = trivia[qCount].t;
+    intervalThisQ = setInterval(countdownThisQ, 1000)
+    $('.card-header').text(`Time Remaining: ${timeRemaining}`);
 }
 
 function checkAnswer() {
-    if ($(this).data('btn') == trivia[qCount].c) {
-        $('.card-title').html("Correct!")
-    } else {
-        $('.card-title').html("Incorrect.");
-        $(this).removeClass('btn-dark').addClass('btn-danger')
+    if (enabled) {
+        enabled = false;
+        clearInterval(intervalThisQ);
+        if ($(this).data('btn') == trivia[qCount].c) {
+            $('.card-title').html("Correct!")
+            correct++;
+        } else {
+            $('.card-title').html("Incorrect.");
+            $(this).removeClass('btn-dark').addClass('btn-danger')
+        }
+        $(`[data-btn~=${trivia[qCount].c}]`).removeClass('btn-dark').addClass('btn-success');
+        intervalNextQ = setInterval(countdownToNext, 1000);
+        timeToNext = 5;
     }
-    $(`[data-btn~=${trivia[qCount].c}]`).removeClass('btn-dark').addClass('btn-success');
-    setTimeout(newQuestion, 5000);
+}
+
+function countdownThisQ() {
+    timeRemaining--;
+    $('.card-header').text(`Time Remaining: ${timeRemaining}`);
+    if (timeRemaining == 0) {
+        if (enabled) {
+            checkAnswer();
+            enabled = false;
+        }
+    }
+}
+
+function countdownToNext() {
+    $('.card-header').text(`Next Question in...${timeToNext}`);
+    if (timeToNext == 0) {
+        clearInterval(intervalNextQ);
+        newQuestion();
+    }
+    timeToNext--;
 }
 
 function end() {
     $('.card-title').text("Game Over");
-    $('.card-text').text("You answered x / x correctly");
+    $('.card-text').text(`You answered ${correct} / ${trivia.length} correctly`);
 }
 
 $('button').on('click', checkAnswer);
